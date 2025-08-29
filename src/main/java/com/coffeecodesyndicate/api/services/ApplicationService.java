@@ -23,13 +23,13 @@ public class ApplicationService {
     }
 
     public Application create(Application a) {
-        a.setId(null); // let JPA generate
+        a.setApplicationID(null); // let JPA generate
         return repo.save(a);
     }
 
     public Application update(Integer id, Application a) {
         if (!repo.existsById(id)) throw new RuntimeException("Application not found");
-        a.setId(id);
+        a.setApplicationID(id);
         return repo.save(a);
     }
 
