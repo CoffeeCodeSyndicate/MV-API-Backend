@@ -25,7 +25,7 @@ public class Application {
     @JoinColumn(name = "user_id")
     private User user;
 
-    //man applications can be linked to one pet
+    //many applications can be linked to one pet
     @ManyToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;

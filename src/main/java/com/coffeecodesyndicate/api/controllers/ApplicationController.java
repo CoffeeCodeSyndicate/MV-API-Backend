@@ -58,4 +58,5 @@ public class ApplicationController {
     public void delete(@PathVariable Integer id) {
         apps.delete(id);
     }
+public class ApplicationController {
 }
