@@ -1,29 +1,41 @@
 package com.coffeecodesyndicate.api.controllers;
 
+import com.coffeecodesyndicate.api.models.Application;
 import com.coffeecodesyndicate.api.models.Pet;
+import com.coffeecodesyndicate.api.repositories.ApplicationRepository;
 import com.coffeecodesyndicate.api.repositories.PetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-        import java.util.List;
+import java.util.List;
 
 @RestController
 @RequestMapping
 public class UserController {
-    //Non-registered users can access pets and see specific pets (by id)
     @Autowired
     private PetRepository petRepository;
 
-    //get all pets
+    @Autowired
+    private ApplicationRepository applicationRepository;
+
     @GetMapping("/pets")
     public List<Pet> getAllPets() {
         return petRepository.findAll();
     };
 
-    //get pet by id
     @GetMapping("/pets/{id}")
     public Pet getPetById(@PathVariable Integer id) {
         return petRepository.findById(id).orElse(null);
     };
+
+    //registered users can create an application
+    @PreAuthorize("hasRole('isRegistered')")
+    @PostMapping("/applications")
+    @ResponseStatus(HttpStatus.CREATED)
+    public Application createApplication(@RequestBody Application application) {
+        return applicationRepository.save(application);
+    }
 
 }
