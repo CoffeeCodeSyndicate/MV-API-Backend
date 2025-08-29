@@ -1,5 +1,5 @@
 package com.coffeecodesyndicate.api.models;
-
+import com.coffeecodesyndicate.api.models.ApplicationStatus;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -19,6 +19,7 @@ public class Application {
 
     private String formTitle;
     private String formBody;
+    private ApplicationStatus applicationStatus;
 
     //many applications can belong to a user
     @ManyToOne
@@ -35,7 +36,7 @@ public class Application {
         return applicationID;
     }
 
-    public void setApplicationID(Integer applicationID) {
+    protected void setApplicationID(Integer applicationID) {
         this.applicationID = applicationID;
     }
 
@@ -47,12 +48,12 @@ public class Application {
         this.applicationDate = applicationDate;
     }
 
-    public ApplicationStatus getStatus() {
-        return status;
+    public ApplicationStatus getApplicationStatus() {
+        return applicationStatus;
     }
 
-    public void setStatus(ApplicationStatus status) {
-        this.status = status;
+    public void setApplicationStatus(ApplicationStatus applicationStatus) {
+        this.applicationStatus = applicationStatus;
     }
 
     public String getFormTitle() {
@@ -70,6 +71,7 @@ public class Application {
     public void setFormBody(String formBody) {
         this.formBody = formBody;
     }
+
 
     public User getUser() {
         return user;
