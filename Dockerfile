@@ -1,9 +1,7 @@
 FROM eclipse-temurin:21-jdk-alpine AS builder
 WORKDIR /app
-COPY api/pom.xml .
-COPY api/src ./src
-COPY api/mvnw .
-RUN chmod +x ./mvnw
+COPY pom.xml .
+COPY src ./src
 RUN ./mvnw package -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
