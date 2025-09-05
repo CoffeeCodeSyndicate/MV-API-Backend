@@ -1,5 +1,6 @@
 package com.coffeecodesyndicate.api.config;
 
+<<<<<<< HEAD
 import com.coffeecodesyndicate.api.config.security.JwtAuthFilter; // <- create this class (OncePerRequestFilter)
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
@@ -105,3 +106,28 @@ public class SecurityConfig {
         return source;
     }
 }
+=======
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+    @Configuration
+    @EnableWebSecurity
+    public class SecurityConfig {
+
+        @Bean
+        public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+            http
+                    .csrf(csrf -> csrf.disable())
+                    .authorizeHttpRequests(authorize -> authorize
+                            .requestMatchers("/unregistered/**").permitAll()
+                            .anyRequest().authenticated()
+                    )
+                    .httpBasic();
+
+            return http.build();
+        }
+    }
+>>>>>>> 21c0e165e0ed882b06e208aa4a8d38134d49a4da

@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer applicationID;
+    private Integer id;
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
@@ -16,35 +16,26 @@ public class Application {
     @Column(name = "application_date")
     private LocalDate applicationDate;
 
-
     private String formTitle;
     private String formBody;
 
-    //many applications can belong to a user
+    // many applications can belong to a user
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    //many applications can be linked to one pet
+    // many applications can be linked to one pet
     @ManyToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
-    //getters & setters
-    public Integer getApplicationID() {
-        return applicationID;
+    // Getters & Setters
+    public Integer getId() {
+        return id;
     }
 
-    public void setApplicationID(Integer applicationID) {
-        this.applicationID = applicationID;
-    }
-
-    public LocalDate getApplicationDate() {
-        return applicationDate;
-    }
-
-    public void setApplicationDate(LocalDate applicationDate) {
-        this.applicationDate = applicationDate;
+    protected void setId(Integer id) {
+        this.id = id;
     }
 
     public ApplicationStatus getStatus() {
@@ -53,6 +44,14 @@ public class Application {
 
     public void setStatus(ApplicationStatus status) {
         this.status = status;
+    }
+
+    public LocalDate getApplicationDate() {
+        return applicationDate;
+    }
+
+    public void setApplicationDate(LocalDate applicationDate) {
+        this.applicationDate = applicationDate;
     }
 
     public String getFormTitle() {
