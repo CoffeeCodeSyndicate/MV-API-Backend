@@ -1,6 +1,7 @@
 package com.coffeecodesyndicate.api.controllers;
 
 import com.coffeecodesyndicate.api.models.Application;
+import com.coffeecodesyndicate.api.models.ApplicationStatus;
 import com.coffeecodesyndicate.api.services.ApplicationService;
 import com.coffeecodesyndicate.api.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -46,10 +47,10 @@ public class ApplicationController {
         return apps.create(a);
     }
 
-    // Update application
-    @PutMapping("/apps/{id}")
-    public Application update(@PathVariable Integer id, @RequestBody Application a) {
-        return apps.update(id, a);
+    //update application's status, not the whole Application object
+    @PutMapping("/apps/{id}/status")
+    public Application updateStatus(@PathVariable Integer id, @RequestParam ApplicationStatus status) {
+        return apps.update(id, status);
     }
 
     // Delete application

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
         import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/unregistered")
 public class UserController {
     //Non-registered users can access pets and see specific pets (by id)
     @Autowired

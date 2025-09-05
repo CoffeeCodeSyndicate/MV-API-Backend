@@ -18,11 +18,17 @@ import java.util.List;
 @PreAuthorize("hasRole('ADMIN')")
 
 public class AdminController {
-    @Autowired
-    private PetRepository PetRepository;
-    private UserRepository UserRepository;
-    private ApplicationRepository ApplicationRepository;
+    private final PetRepository PetRepository;
+    private final UserRepository UserRepository;
+    private final ApplicationRepository ApplicationRepository;
 
+    public AdminController(PetRepository petRepository,
+                           UserRepository userRepository,
+                           ApplicationRepository applicationRepository) {
+        this.PetRepository = petRepository;
+        this.UserRepository = userRepository;
+        this.ApplicationRepository = applicationRepository;
+    }
     // create
     @PostMapping
     public Pet createPet(@RequestBody Pet pet) { return PetRepository.save(pet); }
@@ -90,7 +96,7 @@ public class AdminController {
     @PutMapping("/applications/{id}")
     public Application updateApplication(@PathVariable Integer id, @RequestBody Application updatedApplication) {
         return ApplicationRepository.findById(id).map(application -> {
-            application.setApplicationStatus(updatedApplication.getApplicationStatus());
+            application.setStatus(updatedApplication.getStatus());
             application.setPet(updatedApplication.getPet());
             application.setUser(updatedApplication.getUser());
             application.setFormTitle(updatedApplication.getFormTitle());

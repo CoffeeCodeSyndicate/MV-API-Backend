@@ -1,6 +1,7 @@
 package com.coffeecodesyndicate.api.services;
 
 import com.coffeecodesyndicate.api.models.Application;
+import com.coffeecodesyndicate.api.models.ApplicationStatus;
 import com.coffeecodesyndicate.api.repositories.ApplicationRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,15 +23,15 @@ public class ApplicationService {
         return repo.findById(id).orElseThrow(() -> new RuntimeException("Application not found"));
     }
 
-    public Application create(Application a) {
-        a.setId(null); // let JPA generate
-        return repo.save(a);
+    public Application create(Application application) {
+        application.setStatus(ApplicationStatus.PENDING);
+        return repo.save(application);
     }
 
-    public Application update(Integer id, Application a) {
-        if (!repo.existsById(id)) throw new RuntimeException("Application not found");
-        a.setId(id);
-        return repo.save(a);
+    public Application update(Integer id, ApplicationStatus status) {
+        Application application = findById(id);
+        application.setStatus(status);
+        return repo.save(application);
     }
 
     public void delete(Integer id) {

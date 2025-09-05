@@ -1,5 +1,5 @@
 package com.coffeecodesyndicate.api.models;
-import com.coffeecodesyndicate.api.models.ApplicationStatus;
+
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -8,7 +8,7 @@ import java.time.LocalDate;
 public class Application {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer applicationID;
+    private Integer id;
 
     @Enumerated(EnumType.STRING)
     private ApplicationStatus status;
@@ -16,28 +16,34 @@ public class Application {
     @Column(name = "application_date")
     private LocalDate applicationDate;
 
-
     private String formTitle;
     private String formBody;
-    private ApplicationStatus applicationStatus;
 
-    //many applications can belong to a user
+    // many applications can belong to a user
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    //many applications can be linked to one pet
+    // many applications can be linked to one pet
     @ManyToOne
     @JoinColumn(name = "pet_id")
     private Pet pet;
 
-    //getters & setters
-    public Integer getApplicationID() {
-        return applicationID;
+    // Getters & Setters
+    public Integer getId() {
+        return id;
     }
 
-    protected void setApplicationID(Integer applicationID) {
-        this.applicationID = applicationID;
+    protected void setId(Integer id) {
+        this.id = id;
+    }
+
+    public ApplicationStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ApplicationStatus status) {
+        this.status = status;
     }
 
     public LocalDate getApplicationDate() {
@@ -46,14 +52,6 @@ public class Application {
 
     public void setApplicationDate(LocalDate applicationDate) {
         this.applicationDate = applicationDate;
-    }
-
-    public ApplicationStatus getApplicationStatus() {
-        return applicationStatus;
-    }
-
-    public void setApplicationStatus(ApplicationStatus applicationStatus) {
-        this.applicationStatus = applicationStatus;
     }
 
     public String getFormTitle() {
@@ -71,7 +69,6 @@ public class Application {
     public void setFormBody(String formBody) {
         this.formBody = formBody;
     }
-
 
     public User getUser() {
         return user;
