@@ -15,10 +15,10 @@ import org.springframework.security.web.SecurityFilterChain;
             http
                     .csrf(csrf -> csrf.disable())
                     .authorizeHttpRequests(authorize -> authorize
-                            .requestMatchers("/unregistered/**").permitAll()
+                            .requestMatchers("/unregistered/**", "/login").permitAll()
                             .anyRequest().authenticated()
                     )
-                    .httpBasic();
+                    .oauth2Login();
 
             return http.build();
         }
