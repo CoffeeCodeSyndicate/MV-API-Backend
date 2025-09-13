@@ -18,7 +18,7 @@ import org.springframework.security.web.SecurityFilterChain;
                             .requestMatchers("/unregistered/**", "/login").permitAll()
                             .anyRequest().authenticated()
                     )
-                    .oauth2Login();
+                    .oauth2Login(oauth2 -> {});
 
             return http.build();
         }
