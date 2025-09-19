@@ -29,11 +29,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/unregistered/register").permitAll()
+                        .requestMatchers("/unregistered/register", "/login").permitAll()
                         .requestMatchers("/unregistered/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .httpBasic();
+                .oauth2Login(oauth2 -> {});
 
         return http.build();
     }
