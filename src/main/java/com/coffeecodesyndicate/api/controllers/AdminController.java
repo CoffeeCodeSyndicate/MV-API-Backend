@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/pets")
-@PreAuthorize("hasRole('ADMIN')")
+@PreAuthorize("hasRole('isAdmin')")
 
 public class AdminController {
     private final PetRepository PetRepository;
