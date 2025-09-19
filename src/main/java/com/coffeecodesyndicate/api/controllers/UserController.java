@@ -1,8 +1,12 @@
 package com.coffeecodesyndicate.api.controllers;
 
 import com.coffeecodesyndicate.api.models.Pet;
+import com.coffeecodesyndicate.api.models.User;
 import com.coffeecodesyndicate.api.repositories.PetRepository;
+import com.coffeecodesyndicate.api.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
         import java.util.List;
@@ -10,6 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/unregistered")
 public class UserController {
+
+    @Autowired
+    private UserService userService;
+
     //Non-registered users can access pets and see specific pets (by id)
     @Autowired
     private PetRepository petRepository;
@@ -25,5 +33,17 @@ public class UserController {
     public Pet getPetById(@PathVariable Integer id) {
         return petRepository.findById(id).orElse(null);
     };
+
+    @GetMapping("/users")
+//    @PreAuthorize("hasRole('isAdmin')") //only admins can get all user info, uncomment this when login route is done
+    public List<User> getAllUsers() {
+        return userService.findAll();
+    }
+
+    @PostMapping("/register")
+    @ResponseStatus(HttpStatus.CREATED)
+    public User registerUser(@RequestBody User user) {
+        return userService.registerUser(user);
+    }
 
 }
