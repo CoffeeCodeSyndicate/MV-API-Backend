@@ -5,47 +5,68 @@ import java.time.Instant;
 import java.util.Set;
 
 @Entity
-@Table(name = "Users")
+@Table(
+    name = "Users",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uk_users_username", columnNames = "username"),
+        @UniqueConstraint(name = "uk_users_email", columnNames = "email")
+    }
+)
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // unique username (limit to 50)
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
+    // unique email (limit to 100)
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    // store only the hashed password (BCrypt), never the raw password
+    // store only the hashed password (e.g., BCrypt ~60 chars)
     @Column(nullable = false, length = 255)
     private String passwordHash;
 
-    // isRegistered means they can adopt
-    // if isRegistered is false, can view only
+    // registration status for adoption permissions
     private Boolean isRegistered = false;
 
-    // if true, user has admin privileges
+    // admin flag
     private Boolean isAdmin = false;
 
-    // account status flags for authentication
+    // account status flags
     private Boolean enabled = true; // can log in
     private Boolean locked = false; // locked after violations, etc.
 
     // audit fields
     @Column(nullable = false, updatable = false)
-    private Instant createdAt = Instant.now();
-    private Instant updatedAt = Instant.now();
+    private Instant createdAt;
 
-    // a user can have many applications
+    @Column(nullable = false)
+    private Instant updatedAt;
+
+    // relationships
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Application> applications;
 
-    // a user can have many pets
-    // no cascade or orphanRemoval, so if user is deleted the associated pets aren't deleted either and can default back to being adoptable
+    // if user deleted, pets remain (no cascade)
     @OneToMany(mappedBy = "owner")
     private Set<Pet> pets;
+
+    /* ==== Lifecycle hooks ==== */
+    @PrePersist
+    protected void onCreate() {
+        Instant now = Instant.now();
+        this.createdAt = now;
+        this.updatedAt = now;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = Instant.now();
+    }
 
     /* ========= Getters and Setters ========= */
 
