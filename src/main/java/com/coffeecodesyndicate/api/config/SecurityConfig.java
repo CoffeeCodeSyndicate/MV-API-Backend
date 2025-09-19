@@ -61,17 +61,6 @@ public class SecurityConfig {
         return provider;
     }
 
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/unregistered/register", "/login").permitAll()
-                        .requestMatchers("/unregistered/**").permitAll()
-                        .anyRequest().authenticated()
-                )
-                .oauth2Login(oauth2 -> {});
-
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration cfg) throws Exception {
         return cfg.getAuthenticationManager();
@@ -98,6 +87,7 @@ public class SecurityConfig {
             // ok to keep httpBasic() for now; you can remove when you switch to JWT filter
             .httpBasic(basic -> {})
             .formLogin(form -> form.disable())
+            .oauth2Login(oauth2 -> {})
             .sessionManagement(sm -> sm.sessionCreationPolicy(
                 org.springframework.security.config.http.SessionCreationPolicy.STATELESS
             ));
