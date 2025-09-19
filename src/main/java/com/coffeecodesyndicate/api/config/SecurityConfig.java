@@ -52,6 +52,7 @@ public class SecurityConfig {
     }
 
     @Bean
+
     public AuthenticationProvider authenticationProvider(
             UserDetailsService uds, PasswordEncoder encoder) {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -59,6 +60,17 @@ public class SecurityConfig {
         provider.setPasswordEncoder(encoder);
         return provider;
     }
+
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers("/unregistered/register", "/login").permitAll()
+                        .requestMatchers("/unregistered/**").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> {});
+
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration cfg) throws Exception {
