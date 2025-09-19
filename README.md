@@ -1,12 +1,16 @@
 # MV-API
 
-A Spring Boot 3.5.5 application that provides **user management and authentication using JWT**.  
+A Spring Boot 3.5.5 RESTful API application that manages online pet adoption
+Through relationships between users, applications, and admin tasks **user management and authentication using JWT**.  
 Includes registration, login, and secured endpoints, with support for role-based access.
+
 
 ---
 
 ## 🚀 Features
-- User registration & login  
+- User registration & login
+- Authentication & Authorization with **Auth0 and OAuth**.
+- Onwership enforcement
 - Password hashing with **BCrypt**  
 - JWT access & refresh tokens  
 - Global exception handling  
@@ -17,7 +21,8 @@ Includes registration, login, and secured endpoints, with support for role-based
 ---
 
 ## 📦 Tech Stack
-- **Java 21**  
+- **Java 21**
+- **Maven**  
 - **Spring Boot 3.5.5**
   - Web  
   - Data JPA  
@@ -35,7 +40,8 @@ Includes registration, login, and secured endpoints, with support for role-based
 - Java 21  
 - Maven 3.9+  
 - VS Code or IntelliJ IDEA  
-
+- Cloned repository
+  
 ### Build & Run
 ```bash
 ./mvnw clean install
