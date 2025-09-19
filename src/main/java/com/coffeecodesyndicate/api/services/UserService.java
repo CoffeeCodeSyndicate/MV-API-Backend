@@ -10,81 +10,57 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-<<<<<<< HEAD
 
-    private final UserRepository repo;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-=======
-    private final UserRepository repo;
-    private final PasswordEncoder passwordEncoder;
-
->>>>>>> 86d59849857ec25193912e67624af04cfa311fde
-    public UserService(UserRepository repo, PasswordEncoder passwordEncoder) {
-        this.repo = repo;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll() {
-        return repo.findAll();
+        return userRepository.findAll();
     }
 
-    public User findById(Long id) {
-        return repo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
-    public User create(User u) {
-        u.setId(null); // let JPA generate
-        // encode raw password if present
-        if (u.getPasswordHash() != null && !u.getPasswordHash().isBlank()) {
-            u.setPasswordHash(passwordEncoder.encode(u.getPasswordHash()));
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmailIgnoreCase(email);
+    }
+
+    public boolean emailExists(String email) {
+        return userRepository.existsByEmailIgnoreCase(email);
+    }
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    /** Register a new user (hash raw password into passwordHash). */
+    public User registerUser(User user, String rawPassword) {
+        if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
+            throw new IllegalArgumentException("Email already in use");
         }
-        return repo.save(u);
-    }
 
-    public User update(Long id, User u) {
-        if (!repo.existsById(id)) {
-            throw new RuntimeException("User not found");
+        // Prefer rawPassword param, fallback to transient user.getPassword()
+        String toHash = (rawPassword != null && !rawPassword.isBlank())
+                ? rawPassword
+                : user.getPassword();
+
+        if (toHash == null || toHash.isBlank()) {
+            throw new IllegalArgumentException("Password is required");
         }
-        u.setId(id);
-        // encode raw password if it’s changed
-        if (u.getPasswordHash() != null && !u.getPasswordHash().isBlank()) {
-            u.setPasswordHash(passwordEncoder.encode(u.getPasswordHash()));
-        }
-        return repo.save(u);
-    }
 
-<<<<<<< HEAD
-    public void delete(Long id) {
-=======
-    public Optional<User> findUserByUsername(String username) {
-        return repo.findUserByUsername(username);
-    }
+        user.setPasswordHash(passwordEncoder.encode(toHash));
+        user.setPassword(null); // clear transient field
 
-    public User registerUser(User user) {
-        if (repo.findUserByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setIsRegistered(true); //user is going to be isRegistered, but not isAdmin
-        user.setIsAdmin(false);
+        if (user.getEnabled() == null)   user.setEnabled(true);
+        if (user.getLocked() == null)    user.setLocked(false);
+        if (user.getIsAdmin() == null)   user.setIsAdmin(false);
 
-        return repo.save(user);
-    }
-
-    public User registerAdminUser(User user) {
-        if (repo.findUserByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
-        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setIsRegistered(true); //user is going to be isRegistered and isAdmin
-        user.setIsAdmin(true);
-
-        return repo.save(user);
-    }
-
-    public void delete(Integer id) {
->>>>>>> 86d59849857ec25193912e67624af04cfa311fde
-        repo.deleteById(id);
+        return userRepository.save(user);
     }
 }

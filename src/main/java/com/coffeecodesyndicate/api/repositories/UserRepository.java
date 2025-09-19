@@ -6,17 +6,18 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-<<<<<<< HEAD
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    // find user by email (case insensitive) for login
     Optional<User> findByEmailIgnoreCase(String email);
-
-    // optional: find by username if you also want username-based login
+    boolean existsByEmailIgnoreCase(String email);
     Optional<User> findByUsernameIgnoreCase(String username);
-=======
-public interface UserRepository extends JpaRepository<User, Integer> {
-    Optional<User> findUserByUsername(String username);
->>>>>>> 86d59849857ec25193912e67624af04cfa311fde
+
+    // --- Compatibility for teammate's controller (Integer IDs) ---
+    default Optional<User> findById(Integer id) {
+        return findById(id == null ? null : id.longValue());
+    }
+    default void deleteById(Integer id) {
+        if (id != null) deleteById(id.longValue());
+    }
 }

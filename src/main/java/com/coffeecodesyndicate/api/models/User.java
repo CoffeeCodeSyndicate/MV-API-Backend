@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 import java.util.Set;
 
+
 @Entity
 @Table(
     name = "Users",
@@ -18,42 +19,42 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // unique username (limit to 50)
     @Column(nullable = false, unique = true, length = 50)
     private String username;
 
-    // unique email (limit to 100)
     @Column(nullable = false, unique = true, length = 100)
     private String email;
 
-    // store only the hashed password (e.g., BCrypt ~60 chars)
     @Column(nullable = false, length = 255)
     private String passwordHash;
 
-    // registration status for adoption permissions
     private Boolean isRegistered = false;
-
-    // admin flag
     private Boolean isAdmin = false;
+    private Boolean enabled = true;
+    private Boolean locked = false;
 
-    // account status flags
-    private Boolean enabled = true; // can log in
-    private Boolean locked = false; // locked after violations, etc.
-
-    // audit fields
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
 
     @Column(nullable = false)
     private Instant updatedAt;
 
-    // relationships
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Application> applications;
 
-    // if user deleted, pets remain (no cascade)
     @OneToMany(mappedBy = "owner")
     private Set<Pet> pets;
+
+    /* ==== NEW: transient raw password field ==== */
+    @Transient
+    private String password; // not stored in DB
+
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     /* ==== Lifecycle hooks ==== */
     @PrePersist
@@ -61,13 +62,17 @@ public class User {
         Instant now = Instant.now();
         this.createdAt = now;
         this.updatedAt = now;
+
+        hashPasswordIfNeeded();
     }
 
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = Instant.now();
+        hashPasswordIfNeeded();
     }
 
+    private void hashPasswordIfNeeded() { }
     /* ========= Getters and Setters ========= */
 
     public Long getId() { return id; }
