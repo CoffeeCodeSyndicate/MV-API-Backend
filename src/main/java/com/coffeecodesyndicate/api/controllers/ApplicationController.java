@@ -2,6 +2,7 @@ package com.coffeecodesyndicate.api.controllers;
 
 import com.coffeecodesyndicate.api.models.Application;
 import com.coffeecodesyndicate.api.models.ApplicationStatus;
+import com.coffeecodesyndicate.api.models.User;
 import com.coffeecodesyndicate.api.services.ApplicationService;
 import com.coffeecodesyndicate.api.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -20,40 +21,37 @@ public class ApplicationController {
         this.users = users;
     }
 
-    // List all applications
     @GetMapping("/apps")
     public List<Application> all() {
         return apps.findAll();
     }
 
-    // Get one application
     @GetMapping("/apps/{id}")
     public Application one(@PathVariable Integer id) {
         return apps.findById(id);
     }
 
-    // Create application (body already has user set or null)
     @PostMapping("/apps")
     @ResponseStatus(HttpStatus.CREATED)
     public Application create(@RequestBody Application a) {
         return apps.create(a);
     }
 
-    // Create application for a specific user
+    // NOTE: User IDs are Long (UserRepository<Long>)
     @PostMapping("/apps/user/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public Application createForUser(@PathVariable Integer userId, @RequestBody Application a) {
-        a.setUser(users.findById(userId));
+    public Application createForUser(@PathVariable Long userId, @RequestBody Application a) {
+        User u = users.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found: " + userId));
+        a.setUser(u);
         return apps.create(a);
     }
 
-    //update application's status, not the whole Application object
     @PutMapping("/apps/{id}/status")
     public Application updateStatus(@PathVariable Integer id, @RequestParam ApplicationStatus status) {
         return apps.update(id, status);
     }
 
-    // Delete application
     @DeleteMapping("/apps/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {

@@ -82,8 +82,7 @@ public class AdminController {
         UserRepository.deleteById(id);
     }
 
-
-
+    
     // create
     @PostMapping("/applications")
     public Application createApplication(@RequestBody Application application) { return ApplicationRepository.save(application); }

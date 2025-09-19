@@ -10,61 +10,57 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private final UserRepository repo;
+
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repo, PasswordEncoder passwordEncoder) {
-        this.repo = repo;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll() {
-        return repo.findAll();
+        return userRepository.findAll();
     }
 
-    public User findById(Integer id) {
-        return repo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 
-    public User create(User u) {
-        u.setId(null); // let JPA generate
-        return repo.save(u);
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmailIgnoreCase(email);
     }
 
-    public User update(Integer id, User u) {
-        // ensure it exists (optional)
-        if (!repo.existsById(id)) throw new RuntimeException("User not found");
-        u.setId(id);
-        return repo.save(u);
+    public boolean emailExists(String email) {
+        return userRepository.existsByEmailIgnoreCase(email);
     }
 
-    public Optional<User> findUserByUsername(String username) {
-        return repo.findUserByUsername(username);
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
-    public User registerUser(User user) {
-        if (repo.findUserByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
+    /** Register a new user (hash raw password into passwordHash). */
+    public User registerUser(User user, String rawPassword) {
+        if (userRepository.existsByEmailIgnoreCase(user.getEmail())) {
+            throw new IllegalArgumentException("Email already in use");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setIsRegistered(true); //user is going to be isRegistered, but not isAdmin
-        user.setIsAdmin(false);
 
-        return repo.save(user);
-    }
+        // Prefer rawPassword param, fallback to transient user.getPassword()
+        String toHash = (rawPassword != null && !rawPassword.isBlank())
+                ? rawPassword
+                : user.getPassword();
 
-    public User registerAdminUser(User user) {
-        if (repo.findUserByUsername(user.getUsername()).isPresent()) {
-            throw new RuntimeException("Username already exists");
+        if (toHash == null || toHash.isBlank()) {
+            throw new IllegalArgumentException("Password is required");
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setIsRegistered(true); //user is going to be isRegistered and isAdmin
-        user.setIsAdmin(true);
 
-        return repo.save(user);
-    }
+        user.setPasswordHash(passwordEncoder.encode(toHash));
+        user.setPassword(null); // clear transient field
 
-    public void delete(Integer id) {
-        repo.deleteById(id);
+        if (user.getEnabled() == null)   user.setEnabled(true);
+        if (user.getLocked() == null)    user.setLocked(false);
+        if (user.getIsAdmin() == null)   user.setIsAdmin(false);
+
+        return userRepository.save(user);
     }
 }
