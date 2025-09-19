@@ -1,7 +1,7 @@
 # MV-API
 
 A Spring Boot 3.5.5 RESTful API application that manages online pet adoption
-Through relationships between users, applications, and admin tasks **user management and authentication using JWT**.  
+Through relationships between users, applications, and admin management.  
 Includes registration, login, and secured endpoints, with support for role-based access.
 
 
@@ -10,7 +10,7 @@ Includes registration, login, and secured endpoints, with support for role-based
 ## 🚀 Features
 - User registration & login
 - Authentication & Authorization with **Auth0 and OAuth**.
-- Onwership enforcement
+- Ownership enforcement
 - Password hashing with **BCrypt**  
 - JWT access & refresh tokens  
 - Global exception handling  
