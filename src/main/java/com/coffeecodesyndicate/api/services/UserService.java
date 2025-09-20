@@ -10,61 +10,68 @@ import java.util.Optional;
 
 @Service
 public class UserService {
-    private final UserRepository repo;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository repo, PasswordEncoder passwordEncoder) {
-        this.repo = repo;
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> findAll() {
-        return repo.findAll();
+        return userRepository.findAll();
     }
 
     public User findById(Integer id) {
-        return repo.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-    }
-
-    public User create(User u) {
-        u.setId(null); // let JPA generate
-        return repo.save(u);
-    }
-
-    public User update(Integer id, User u) {
-        // ensure it exists (optional)
-        if (!repo.existsById(id)) throw new RuntimeException("User not found");
-        u.setId(id);
-        return repo.save(u);
+        return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public Optional<User> findUserByUsername(String username) {
-        return repo.findUserByUsername(username);
+        return userRepository.findUserByUsername(username);
+    }
+
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     public User registerUser(User user) {
-        if (repo.findUserByUsername(user.getUsername()).isPresent()) {
+        if (userRepository.findUserByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setIsLoggedIn(true); //user is going to be isLoggedIn, but not isAdmin
-        user.setIsAdmin(false);
+        user.setLoggedIn(false); //user is going to be isLoggedIn, but not isAdmin
+        user.setAdmin(false);
 
-        return repo.save(user);
+        return userRepository.save(user);
     }
 
     public User registerAdminUser(User user) {
-        if (repo.findUserByUsername(user.getUsername()).isPresent()) {
+        if (userRepository.findUserByUsername(user.getUsername()).isPresent()) {
             throw new RuntimeException("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setIsLoggedIn(true); //user is going to be isLoggedIn and isAdmin
-        user.setIsAdmin(true);
+        user.setLoggedIn(true); //user is going to be isLoggedIn and isAdmin
+        user.setAdmin(true);
 
-        return repo.save(user);
+        return userRepository.save(user);
+    }
+
+    public User loginUser(String username, String password) {
+        Optional<User> userOptional = userRepository.findUserByUsername(username);
+        if (userOptional.isEmpty()) {
+            throw new IllegalArgumentException("Invalid username or password");
+        }
+
+        User user = userOptional.get();
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("Invalid username or password");
+        }
+
+        user.setLoggedIn(true);
+        return userRepository.save(user);
     }
 
     public void delete(Integer id) {
-        repo.deleteById(id);
+        userRepository.deleteById(id);
     }
 }
