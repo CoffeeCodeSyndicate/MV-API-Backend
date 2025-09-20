@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/pets")
-@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("/admin/")
+@PreAuthorize("hasRole('Role_Admin')")
 
 public class AdminController {
     private final PetRepository PetRepository;
@@ -70,8 +70,8 @@ public class AdminController {
             user.setUsername(updatedUser.getUsername());
             user.setEmail(updatedUser.getEmail());
             user.setPassword(updatedUser.getPassword());
-            user.setIsAdmin(updatedUser.getIsAdmin());
-            user.setIsLoggedIn(updatedUser.getIsLoggedIn());
+            user.setAdmin(updatedUser.isAdmin());
+            user.setLoggedIn(updatedUser.isLoggedIn());
             return UserRepository.save(user);
         }).orElseThrow();
     }
