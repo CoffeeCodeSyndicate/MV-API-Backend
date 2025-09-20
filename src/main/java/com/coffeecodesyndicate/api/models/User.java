@@ -1,12 +1,17 @@
 package com.coffeecodesyndicate.api.models;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 @Entity
 @Table(name = "Users")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -22,10 +27,10 @@ public class User {
 
     //isLoggedIn means they can adopt
     //if isLoggedIn is false, can view only
-    private Boolean isLoggedIn;
+    private boolean isLoggedIn;
 
     //if true, user has admin privileges
-    private Boolean isAdmin;
+    private boolean isAdmin;
 
     //a user can have many applications
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -48,9 +53,18 @@ public class User {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public boolean getIsLoggedIn() { return isLoggedIn; }
-    public void setIsLoggedIn(Boolean isLoggedIn) { this.isLoggedIn = isLoggedIn; }
+    public boolean isLoggedIn() { return isLoggedIn; }
+    public void setLoggedIn(boolean isLoggedIn) { this.isLoggedIn = isLoggedIn; }
 
-    public Boolean getIsAdmin() { return isAdmin; }
-    public void setIsAdmin(Boolean isAdmin) { this.isAdmin = isAdmin; }
+    public boolean isAdmin() { return isAdmin; }
+    public void setAdmin(boolean isAdmin) { this.isAdmin = isAdmin; }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (this.isLoggedIn()) {
+            return Collections.singletonList(new SimpleGrantedAuthority("ROLE_LOGGED_IN"));
+        }
+        return Collections.emptyList();
+    }
+
 }
