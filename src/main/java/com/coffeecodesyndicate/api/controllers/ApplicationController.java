@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/applications")
 public class ApplicationController {
     private final ApplicationService apps;
     private final UserService users;
@@ -21,26 +21,26 @@ public class ApplicationController {
     }
 
     // List all applications
-    @GetMapping("/apps")
+    @GetMapping
     public List<Application> all() {
         return apps.findAll();
     }
 
     // Get one application
-    @GetMapping("/apps/{id}")
+    @GetMapping("/{id}")
     public Application one(@PathVariable Integer id) {
         return apps.findById(id);
     }
 
     // Create application (body already has user set or null)
-    @PostMapping("/apps")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Application create(@RequestBody Application a) {
         return apps.create(a);
     }
 
     // Create application for a specific user
-    @PostMapping("/apps/user/{userId}")
+    @PostMapping("/user/{userId}")
     @ResponseStatus(HttpStatus.CREATED)
     public Application createForUser(@PathVariable Integer userId, @RequestBody Application a) {
         a.setUser(users.findById(userId));
@@ -48,13 +48,13 @@ public class ApplicationController {
     }
 
     //update application's status, not the whole Application object
-    @PutMapping("/apps/{id}/status")
+    @PutMapping("/{id}/status")
     public Application updateStatus(@PathVariable Integer id, @RequestParam ApplicationStatus status) {
         return apps.update(id, status);
     }
 
     // Delete application
-    @DeleteMapping("/apps/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Integer id) {
         apps.delete(id);
