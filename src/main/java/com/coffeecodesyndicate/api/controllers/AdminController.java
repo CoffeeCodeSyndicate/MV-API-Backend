@@ -71,7 +71,7 @@ public class AdminController {
             user.setEmail(updatedUser.getEmail());
             user.setPassword(updatedUser.getPassword());
             user.setIsAdmin(updatedUser.getIsAdmin());
-            user.setIsRegistered(updatedUser.getIsRegistered());
+            user.setIsLoggedIn(updatedUser.getIsLoggedIn());
             return UserRepository.save(user);
         }).orElseThrow();
     }

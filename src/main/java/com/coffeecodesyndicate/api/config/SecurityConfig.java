@@ -29,8 +29,8 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/unregistered/register").permitAll()
-                        .requestMatchers("/unregistered/**").permitAll()
+                        .requestMatchers("/register").permitAll()
+                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .httpBasic();
@@ -52,8 +52,8 @@ public class SecurityConfig {
                     .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
 
             String role = "Role_Viewer"; //create initial role
-            if (user.getIsRegistered()) {
-                role = "Role_Registered";
+            if (user.getIsLoggedIn()) {
+                role = "Role_LoggedIn";
             }
             if (user.getIsAdmin()) {
                 role = "Role_Admin";

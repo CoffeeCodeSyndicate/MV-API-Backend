@@ -13,7 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/registered")
-@PreAuthorize("hasRole('isRegistered')")
+@PreAuthorize("hasRole('isLoggedIn')")
 public class RegisteredUserController {
     @Autowired
     private PetRepository petRepository;

@@ -47,7 +47,7 @@ public class UserService {
             throw new RuntimeException("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setIsRegistered(true); //user is going to be isRegistered, but not isAdmin
+        user.setIsLoggedIn(true); //user is going to be isLoggedIn, but not isAdmin
         user.setIsAdmin(false);
 
         return repo.save(user);
@@ -58,7 +58,7 @@ public class UserService {
             throw new RuntimeException("Username already exists");
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setIsRegistered(true); //user is going to be isRegistered and isAdmin
+        user.setIsLoggedIn(true); //user is going to be isLoggedIn and isAdmin
         user.setIsAdmin(true);
 
         return repo.save(user);

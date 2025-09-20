@@ -20,9 +20,9 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    //isRegistered means they can adopt
-    //if isRegistered is false, can view only
-    private Boolean isRegistered;
+    //isLoggedIn means they can adopt
+    //if isLoggedIn is false, can view only
+    private Boolean isLoggedIn;
 
     //if true, user has admin privileges
     private Boolean isAdmin;
@@ -48,8 +48,8 @@ public class User {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public boolean getIsRegistered() { return isRegistered; }
-    public void setIsRegistered(Boolean isRegistered) { this.isRegistered = isRegistered; }
+    public boolean getIsLoggedIn() { return isLoggedIn; }
+    public void setIsLoggedIn(Boolean isLoggedIn) { this.isLoggedIn = isLoggedIn; }
 
     public Boolean getIsAdmin() { return isAdmin; }
     public void setIsAdmin(Boolean isAdmin) { this.isAdmin = isAdmin; }
