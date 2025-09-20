@@ -32,8 +32,11 @@ public class Pet {
     public Integer getAge() { return age; }
     public void setAge(Integer age) { this.age = age; }
 
+    public User getOwner() { return owner; }
+    public void setOwner(User owner) { this.owner = owner; }
+
     public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = Pet.this.description; }
+    public void setDescription(String description) { this.description = description; }
 
     public Boolean getIsAdopted() { return isAdopted; }
     public void setIsAdopted(Boolean isAdopted) { this.isAdopted = isAdopted; }

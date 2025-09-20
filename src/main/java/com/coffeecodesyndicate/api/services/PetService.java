@@ -1,6 +1,7 @@
 package com.coffeecodesyndicate.api.services;
 
 import com.coffeecodesyndicate.api.models.Pet;
+import com.coffeecodesyndicate.api.models.User;
 import com.coffeecodesyndicate.api.repositories.PetRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,11 @@ public class PetService {
     public Pet findById(Integer id) {
         return repo.findById(id).orElseThrow(() -> new RuntimeException("Pet not found"));
     }
+
+    public List<Pet> findAllByOwner(User owner) {
+        return repo.findAll();
+    }
+
 
     public Pet create(Pet p) { p.setId(null); return repo.save(p); }
 
