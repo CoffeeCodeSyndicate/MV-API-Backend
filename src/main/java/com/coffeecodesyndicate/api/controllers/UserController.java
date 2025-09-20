@@ -1,5 +1,6 @@
 package com.coffeecodesyndicate.api.controllers;
 
+import com.coffeecodesyndicate.api.dto.LoginRequest;
 import com.coffeecodesyndicate.api.models.Pet;
 import com.coffeecodesyndicate.api.models.User;
 import com.coffeecodesyndicate.api.repositories.PetRepository;
@@ -9,10 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-        import java.util.List;
+import java.util.List;
 
 @RestController
-@RequestMapping("/unregistered")
+@RequestMapping("/")
 public class UserController {
 
     @Autowired
@@ -35,7 +36,6 @@ public class UserController {
     };
 
     @GetMapping("/users")
-//    @PreAuthorize("hasRole('isAdmin')") //only admins can get all user info, uncomment this when login route is done
     public List<User> getAllUsers() {
         return userService.findAll();
     }
@@ -44,6 +44,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public User registerUser(@RequestBody User user) {
         return userService.registerUser(user);
+    }
+
+    @PostMapping("/login")
+    @ResponseStatus(HttpStatus.OK)
+    public User loginUser(@RequestBody LoginRequest loginRequest) {
+        return userService.loginUser(loginRequest.getUsername(), loginRequest.getPassword());
     }
 
 }
