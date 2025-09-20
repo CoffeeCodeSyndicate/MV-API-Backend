@@ -14,9 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/")
-@PreAuthorize("hasRole('Role_Admin')")
-
+@RequestMapping("/admin")
+//@PreAuthorize("hasRole('Role_Admin')")
 public class AdminController {
     private final PetRepository PetRepository;
     private final UserRepository UserRepository;
