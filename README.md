@@ -79,8 +79,3 @@ docker run -p 8080:8080 snuggle-squad
 This project is a **learning demo** for mastering Spring Boot APIs,
 but it can also serve as the foundation of a real-world **pet adoption system**.
 Because every buddy deserves a forever home! 🐾❤️
-
-
-
-Do you want me to also include a **cute ASCII art paw 🐾 banner** at the very top (for extra GitHub flair), or keep it simple and professional?
-```
