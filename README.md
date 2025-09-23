@@ -8,24 +8,24 @@ Perfect for learning Spring Boot + JPA + Security, or for use as a starter templ
 
 ## ✨ Features
 
-- 👥 **User Management** – register, login, role-based access (Admin / Registered / Visitor)  
-- 🐾 **Pet Management** – create, view, update, delete pets  
-- 📄 **Adoption Applications** – apply for pets, track status (`PENDING`, `APPROVED`, `REJECTED`)  
-- 🔐 **Spring Security** – BCrypt password encoding, role-based restrictions  
-- 🗄️ **Database** – H2 in-memory DB with seed data for quick start  
-- 🐳 **Dockerized** – simple Dockerfile for containerized deployments  
-- 🧪 **Testing** – JUnit5 test scaffolding included  
+-  **User Management** – register, login, role-based access (Admin / Registered / Visitor)  
+-  **Pet Management** – create, view, update, delete pets  
+-  **Adoption Applications** – apply for pets, track status (`PENDING`, `APPROVED`, `REJECTED`)  
+-  **Spring Security** – BCrypt password encoding, role-based restrictions  
+-  **Database** – H2 in-memory DB with seed data for quick start  
+-  **Dockerized** – simple Dockerfile for containerized deployments  
+-  **Testing** – JUnit5 test scaffolding included  
 
 ---
 
 ## 🏗️ Tech Stack
 
-- ☕ Java 21  
-- 🚀 Spring Boot 3.5  
-- 🛡️ Spring Security (BCrypt)  
-- 📦 Spring Data JPA  
-- 🐘 H2 Database (in-memory)  
-- 🐳 Docker, Maven Wrapper  
+-  Java 21  
+-  Spring Boot 3.5  
+-  Spring Security (BCrypt)  
+-  Spring Data JPA  
+-  H2 Database (in-memory)  
+-  Docker, Maven Wrapper  
 
 ---
 
